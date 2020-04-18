@@ -83,13 +83,13 @@ class Player {
 		do Memory.poke(memAddress+160, 3504);
 		do Memory.poke(memAddress+192, 2016);
 		do Memory.poke(memAddress+224, 0);
-		do Memory.poke(memAddress+256, 964);
-		do Memory.poke(memAddress+288, 2026);
-		do Memory.poke(memAddress+320, 2044);
-		do Memory.poke(memAddress+352, 2026);
-		do Memory.poke(memAddress+384, 2020);
+		do Memory.poke(memAddress+256, 960);
+		do Memory.poke(memAddress+288, 2016);
+		do Memory.poke(memAddress+320, 2016);
+		do Memory.poke(memAddress+352, 2016);
+		do Memory.poke(memAddress+384, 2016);
 		do Memory.poke(memAddress+416, 1632);
-		do Memory.poke(memAddress+448, 1632);
+		do Memory.poke(memAddress+448, 3696);
 		do Memory.poke(memAddress+480, 0);
 		return;
 	}
