@@ -59,17 +59,7 @@ class MazeGame {
 		}
 
 		// Now that we have generated our maze matrix, let's populate it.
-		do setTile( 0,  0, TILE_WALL);
-		do setTile( 0,  1, TILE_WALL);
-		do setTile( 0,  2, TILE_WALL);
-		do setTile( 0,  3, TILE_WALL);
-		do setTile(15,  0, TILE_WALL);
-		do setTile( 0, 31, TILE_WALL);
-		do setTile(15, 31, TILE_WALL);
-		do setTile( 4,  4, TILE_WALL);
-		do setTile( 4,  5, TILE_WALL);
-		do setTile( 5,  5, TILE_WALL);
-		do setTile( 2,  4, TILE_ITEM);
+		do loadMap();
 
 		// Now that the walls are figured out, let's draw 'em.
 		do drawLevel();
@@ -78,6 +68,25 @@ class MazeGame {
 		let p1 = Player.new(1,1);
 
 		return this;
+	}
+
+	method void loadMap() {
+		var int col;
+		var int row;
+
+		// Fill out the top and bottom rows
+		let col = 0;
+		while(col < COL_COUNT) {
+			do setTile(  0, col, TILE_WALL);
+			let col = col + 1;
+		}
+
+		do setTile( 4,  4, TILE_WALL);
+		do setTile( 4,  5, TILE_WALL);
+		do setTile( 5,  5, TILE_WALL);
+		do setTile( 2,  4, TILE_ITEM);
+
+		return;
 	}
 
 	method void dispose() {
