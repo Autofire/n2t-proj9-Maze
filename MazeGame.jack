@@ -1,0 +1,141 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/SquareGame.jack
+
+/**
+ * Implements the Maze game. TODO
+ */
+
+class MazeGame {
+	field Array maze;	// Will be formatted as maze[row][col],
+						// and contains booleans. True means wall,
+						// false means no wall.
+
+	// Our "constants." This way, we aren't relying too much on magic numbers
+	static int ROW_COUNT;
+	static int COL_COUNT;
+	static int ELEM_SIZE;
+	
+	constructor MazeGame new() {
+		var int row;
+		var int col;
+
+		// Note that each element is 16x16, and our screen is
+		// 512x256. Thus, our playfield has 16 rows and 32 columns.
+		let ROW_COUNT = 16;
+		let COL_COUNT = 32;
+		let ELEM_SIZE = 16;
+
+
+		let maze = Array.new(ROW_COUNT);
+
+		// First, we shall create the array for each row. Then we
+		// shall set each cell to false.
+		let row = 0;
+		while(row < ROW_COUNT) {
+			let maze[row] = Array.new(COL_COUNT);
+
+			let col = 0;
+			while(col < COL_COUNT) {
+				//let maze[row][col] = false;
+				do setWall(row, col, false);
+				let col = col + 1;
+			}
+
+			let row = row + 1;
+		}
+
+		// Now that we have generated our maze matrix, let's populate it.
+		do setWall(0, 0, true);
+		do setWall(15, 0, true);
+		do setWall(0, 31, true);
+		do setWall(15, 31, true);
+		do setWall(4, 4, true);
+		do setWall(4, 5, true);
+		do setWall(5, 5, true);
+
+		// Now that the walls are figured out, let's draw 'em.
+		do drawWalls();
+
+		return this;
+	}
+
+	method void dispose() {
+		var int row;
+		var Array rowPtr;
+		let row = 0;
+
+		while(row < ROW_COUNT) {
+			let rowPtr = maze[row];
+			do rowPtr.dispose();
+			let row = row + 1;
+		}
+
+		do maze.dispose();
+
+		return;
+	}
+
+	method boolean getWall(int row, int col) {
+		var Array rowPtr;
+		
+		let rowPtr = maze[row];
+		return rowPtr[col];
+	}
+
+	method void setWall(int row, int col, boolean val) {
+		var Array rowPtr;
+
+		let rowPtr = maze[row];
+		let rowPtr[col] = val;
+
+		return;
+	}
+
+	method void drawWalls() {
+
+		var int row;
+		var int col;
+
+		// Ok, now that we've done that, we'll need to draw
+		// each of the walls.
+		let row = 0;
+		while(row < ROW_COUNT) {
+			let col = 0;
+			while(col < COL_COUNT) {
+				
+				if(getWall(row, col)) {
+					do drawWall(row, col);
+				}
+
+				let col = col + 1;
+			}
+
+			let row = row + 1;
+		}
+
+		return;
+	}
+
+	method void drawWall(int row, int col) {
+		var int x1;
+		var int y1;
+		var int x2;
+		var int y2;
+	
+		let x1 = col * ELEM_SIZE;
+		let x2 = x1 + ELEM_SIZE - 1;
+
+		let y1 = row * ELEM_SIZE;
+		let y2 = y1 + ELEM_SIZE - 1;
+
+		do Screen.drawRectangle(x1, y1, x2, y2);
+
+		return;
+	}
+
+}
+
+
+
