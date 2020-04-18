@@ -13,10 +13,15 @@ class MazeGame {
 	static int COL_COUNT;
 	static int ELEM_SIZE;
 
+	static int TILE_EMPTY;
+	static int TILE_WALL;
+	static int TILE_ITEM;
+
 	field Array maze;	// Will be formatted as maze[row][col],
 						// and contains booleans. True means wall,
 						// false means no wall.
 	field Player p1;
+	field int itemCount;
 
 	
 	constructor MazeGame new() {
@@ -29,6 +34,11 @@ class MazeGame {
 		let COL_COUNT = 32;
 		let ELEM_SIZE = 16;
 
+		let TILE_EMPTY = 0;
+		let TILE_WALL = 1;
+		let TILE_ITEM = 2;
+
+		let itemCount = 0;
 
 		let maze = Array.new(ROW_COUNT);
 
@@ -41,7 +51,7 @@ class MazeGame {
 			let col = 0;
 			while(col < COL_COUNT) {
 				//let maze[row][col] = false;
-				do setWall(row, col, false);
+				do setTile(row, col, TILE_EMPTY);
 				let col = col + 1;
 			}
 
@@ -49,16 +59,21 @@ class MazeGame {
 		}
 
 		// Now that we have generated our maze matrix, let's populate it.
-		//do setWall(0, 0, true);
-		do setWall(15, 0, true);
-		do setWall(0, 31, true);
-		do setWall(15, 31, true);
-		do setWall(4, 4, true);
-		do setWall(4, 5, true);
-		do setWall(5, 5, true);
+		do setTile( 0,  0, TILE_WALL);
+		do setTile( 0,  1, TILE_WALL);
+		do setTile( 0,  2, TILE_WALL);
+		do setTile( 0,  3, TILE_WALL);
+		do setTile(15,  0, TILE_WALL);
+		do setTile( 0, 31, TILE_WALL);
+		do setTile(15, 31, TILE_WALL);
+		do setTile( 4,  4, TILE_WALL);
+		do setTile( 4,  5, TILE_WALL);
+		do setTile( 5,  5, TILE_WALL);
+		do setTile( 2,  4, TILE_ITEM);
 
 		// Now that the walls are figured out, let's draw 'em.
-		do drawWalls();
+		do drawLevel();
+		do drawHUD();
 
 		let p1 = Player.new(1,1);
 
@@ -114,8 +129,14 @@ class MazeGame {
 				) {
 					// Note that we can ONLY CHECK THIS if our desired position
 					// is within bounds. Hence, this is its own condition check.
-					if(~getWall(newRow, newCol)) {
+					if(~(getTile(newRow, newCol) = TILE_WALL)) {
 						do p1.move(newCol, newRow);
+
+						if(getTile(newRow, newCol) = TILE_ITEM) {
+							do setTile(newRow, newCol, TILE_EMPTY);
+							let itemCount = itemCount + 1;
+							do drawHUD();
+						}
 					}
 				}
 			}
@@ -131,14 +152,14 @@ class MazeGame {
 		return;
 	}
 
-	method boolean getWall(int row, int col) {
+	method int getTile(int row, int col) {
 		var Array rowPtr;
 		
 		let rowPtr = maze[row];
 		return rowPtr[col];
 	}
 
-	method void setWall(int row, int col, boolean val) {
+	method void setTile(int row, int col, int val) {
 		var Array rowPtr;
 
 		let rowPtr = maze[row];
@@ -147,7 +168,12 @@ class MazeGame {
 		return;
 	}
 
-	method void drawWalls() {
+
+	//////////////////////
+	/// DRAW FUNCTIONS ///
+	//////////////////////
+
+	method void drawLevel() {
 
 		var int row;
 		var int col;
@@ -159,9 +185,8 @@ class MazeGame {
 			let col = 0;
 			while(col < COL_COUNT) {
 				
-				if(getWall(row, col)) {
-					do drawWall(row, col);
-				}
+				if(getTile(row, col) = TILE_WALL) { do drawWall(row, col); }
+				if(getTile(row, col) = TILE_ITEM) { do drawItem(row, col); }
 
 				let col = col + 1;
 			}
@@ -185,6 +210,25 @@ class MazeGame {
 		let y2 = y1 + ELEM_SIZE - 1;
 
 		do Screen.drawRectangle(x1, y1, x2, y2);
+
+		return;
+	}
+
+	method void drawItem(int row, int col) {
+
+		do Screen.drawCircle(
+			(col * ELEM_SIZE) + (ELEM_SIZE/2),
+			(row * ELEM_SIZE) + (ELEM_SIZE/2),
+			ELEM_SIZE / 4
+		);
+
+		return;
+	}
+
+	method void drawHUD() {
+		do Output.moveCursor(0, 0);
+		do Output.printString("Cookies: ");
+		do Output.printInt(itemCount);
 
 		return;
 	}
