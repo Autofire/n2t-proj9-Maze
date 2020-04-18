@@ -8,14 +8,16 @@
  */
 
 class MazeGame {
-	field Array maze;	// Will be formatted as maze[row][col],
-						// and contains booleans. True means wall,
-						// false means no wall.
-
 	// Our "constants." This way, we aren't relying too much on magic numbers
 	static int ROW_COUNT;
 	static int COL_COUNT;
 	static int ELEM_SIZE;
+
+	field Array maze;	// Will be formatted as maze[row][col],
+						// and contains booleans. True means wall,
+						// false means no wall.
+	field Player p1;
+
 	
 	constructor MazeGame new() {
 		var int row;
@@ -47,7 +49,7 @@ class MazeGame {
 		}
 
 		// Now that we have generated our maze matrix, let's populate it.
-		do setWall(0, 0, true);
+		//do setWall(0, 0, true);
 		do setWall(15, 0, true);
 		do setWall(0, 31, true);
 		do setWall(15, 31, true);
@@ -57,6 +59,9 @@ class MazeGame {
 
 		// Now that the walls are figured out, let's draw 'em.
 		do drawWalls();
+
+		let p1 = Player.new(1,1);
+		do p1.moveRight();
 
 		return this;
 	}
@@ -73,6 +78,46 @@ class MazeGame {
 		}
 
 		do maze.dispose();
+		do p1.dispose();
+
+		return;
+	}
+
+	method void run() {
+		// Loosely based on the square run method
+		var int newCol;
+		var int newRow;
+		var char key;
+		var boolean exit;
+		let exit = false;
+
+		while(~exit) {
+			// Don't do anything until the player hits a key
+			while(key = 0) {
+				let key = Keyboard.keyPressed();
+			}
+
+			let newCol = p1.getCol();
+			let newRow = p1.getRow();
+
+			if(key = 81)  { let exit = true; }			// q key
+			if(key = 131) { let newRow = newRow - 1; }	// up
+			if(key = 133) { let newRow = newRow + 1; }	// down
+			if(key = 130) { let newCol = newCol - 1; }	// left
+			if(key = 132) { let newCol = newCol + 1; }	// right
+
+			// If either row or column has changed...
+			if((~(newCol = p1.getCol())) | (~(newRow = p1.getRow()))) {
+				do p1.move(newCol, newRow);
+			}
+
+			// Now we don't want to do anything until the player
+			// stops pressing the key.
+			while(~(key = 0)) {
+				let key = Keyboard.keyPressed();
+			}
+
+		}
 
 		return;
 	}

@@ -1,0 +1,126 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/Main.jack
+
+class Player {
+	static int SIZE;
+	static int COL_COUNT;	// Used because rawDraw is dumb.
+
+	field int row;
+	field int col;
+
+	constructor Player new(int r, int c) {
+		let COL_COUNT = 32;
+		let SIZE = 16;
+
+		let row = r;
+		let col = c;
+
+		do draw();
+
+		return this;
+	}
+
+	method void dispose() {
+		//do clear();
+
+		return;
+	}
+
+	method void draw() {
+		do Player.rawDraw((row * SIZE * COL_COUNT) + (col));
+		return;
+	}
+
+	method void clear() {
+		
+		var int x1;
+		var int y1;
+		var int x2;
+		var int y2;
+	
+		let x1 = col * SIZE;
+		let x2 = x1 + SIZE - 1;
+
+		let y1 = row * SIZE;
+		let y2 = y1 + SIZE - 1;
+
+		do Screen.setColor(false);
+		do Screen.drawRectangle(x1, y1, x2, y2);
+		do Screen.setColor(true);
+
+		return;
+	}
+
+	method int getRow() {
+		return row;
+	}
+
+	method int getCol() {
+		return col;
+	}
+
+	method void move(int newCol, int newRow) {
+		do clear();
+		let col = newCol;
+		let row = newRow;
+		do draw();
+
+		return;
+	}
+
+	method void moveRight() {
+		do clear();
+		let col = col + 1;
+		do draw();
+
+		return;
+	}
+
+	method void moveLeft() {
+		do clear();
+		let col = col - 1;
+		do draw();
+
+		return;
+	}
+
+	method void moveUp() {
+		do clear();
+		let row = row - 1;
+		do draw();
+
+		return;
+	}
+
+	method void moveDown() {
+		do clear();
+		let row = row + 1;
+		do draw();
+
+		return;
+	}
+
+	function void rawDraw(int location) {
+		var int memAddress;
+		let memAddress = 16384+location;
+		do Memory.poke(memAddress+0, 0);
+		do Memory.poke(memAddress+32, 0);
+		do Memory.poke(memAddress+64, 2016);
+		do Memory.poke(memAddress+96, 4080);
+		do Memory.poke(memAddress+128, 3504);
+		do Memory.poke(memAddress+160, 3504);
+		do Memory.poke(memAddress+192, 2016);
+		do Memory.poke(memAddress+224, 0);
+		do Memory.poke(memAddress+256, 964);
+		do Memory.poke(memAddress+288, 2026);
+		do Memory.poke(memAddress+320, 2044);
+		do Memory.poke(memAddress+352, 2026);
+		do Memory.poke(memAddress+384, 2020);
+		do Memory.poke(memAddress+416, 1632);
+		do Memory.poke(memAddress+448, 1632);
+		do Memory.poke(memAddress+480, 0);
+		return;
+	}
+}
