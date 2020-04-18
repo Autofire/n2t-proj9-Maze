@@ -6,7 +6,6 @@
 /**
  * Implements the Maze game. TODO
  */
-
 class MazeGame {
 	// Our "constants." This way, we aren't relying too much on magic numbers
 	static int ROW_COUNT;
@@ -22,6 +21,7 @@ class MazeGame {
 						// false means no wall.
 	field Player p1;
 	field int itemCount;
+	field int targetItemCount;
 
 	
 	constructor MazeGame new() {
@@ -65,7 +65,7 @@ class MazeGame {
 		do drawLevel();
 		do drawHUD();
 
-		let p1 = Player.new(1,1);
+		let p1 = Player.new(2,1);
 
 		return this;
 	}
@@ -74,15 +74,14 @@ class MazeGame {
 		var int col;
 		var int row;
 
-		// Fill out the top row
-		/*
-		let col = 0;
-		while(col < COL_COUNT) {
-			do setTile(  0, col, TILE_WALL);
-			let col = col + 1;
-		}
-		*/
+		// Top bar
 		do placeHLine(0, 0, COL_COUNT - 1);
+
+		// Outside items
+		do setTile(4,3, TILE_ITEM);
+		do setTile(10,0, TILE_ITEM);
+
+		// Main house
 		do placeRect( 3, 14,  8, 27);
 		do placeRect( 3,  6, 16, 18);
 		do placeRect( 3,  8, 18, 22);
@@ -107,12 +106,15 @@ class MazeGame {
 		do setTile(13,22, TILE_ITEM);
 		do setTile(12,23, TILE_ITEM);
 
-/*
-		do setTile( 4,  4, TILE_WALL);
-		do setTile( 4,  5, TILE_WALL);
-		do setTile( 5,  5, TILE_WALL);
-		do setTile( 2,  4, TILE_ITEM);
-		*/
+		// Shed
+		do placeRect(11,15,0, 4);
+		do setTile(12, 4, TILE_EMPTY);
+		do setTile(12, 1, TILE_ITEM);
+		do setTile(13, 1, TILE_ITEM);
+		do setTile(12, 2, TILE_ITEM);
+		do setTile(14, 2, TILE_ITEM);
+
+		let targetItemCount = 15;
 
 		return;
 	}
@@ -293,6 +295,10 @@ class MazeGame {
 		do Output.moveCursor(0, 0);
 		do Output.printString("Cookies: ");
 		do Output.printInt(itemCount);
+
+		if(itemCount = targetItemCount) {
+			do Output.printString(" -- that's all of them! Press Q to quit.");
+		}
 
 		return;
 	}
