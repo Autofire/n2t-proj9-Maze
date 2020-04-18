@@ -107,12 +107,16 @@ class MazeGame {
 
 			// If either row or column has changed...
 			if((~(newCol = p1.getCol())) | (~(newRow = p1.getRow()))) {
-				// Ok, well we want a different spot. Now we'll check to make sure
+				// ...then we want a different spot. Now we'll check to make sure
 				// everything is in bounds and we aren't trying to go through a wall.
 				if((newCol > -1) & (newCol < COL_COUNT) &
-				   (newRow > -1) & (newRow < ROW_COUNT)) {
-
-					do p1.move(newCol, newRow);
+				   (newRow > -1) & (newRow < ROW_COUNT)
+				) {
+					// Note that we can ONLY CHECK THIS if our desired position
+					// is within bounds. Hence, this is its own condition check.
+					if(~getWall(newRow, newCol)) {
+						do p1.move(newCol, newRow);
+					}
 				}
 			}
 
