@@ -61,7 +61,6 @@ class MazeGame {
 		do drawWalls();
 
 		let p1 = Player.new(1,1);
-		do p1.moveRight();
 
 		return this;
 	}

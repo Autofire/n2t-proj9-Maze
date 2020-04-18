@@ -28,6 +28,24 @@ class Player {
 		return;
 	}
 
+	method int getRow() {
+		return row;
+	}
+
+	method int getCol() {
+		return col;
+	}
+
+	method void move(int newCol, int newRow) {
+		do clear();
+		let col = newCol;
+		let row = newRow;
+		do draw();
+
+		return;
+	}
+
+
 	method void draw() {
 		do Player.rawDraw((row * SIZE * COL_COUNT) + (col));
 		return;
@@ -53,54 +71,6 @@ class Player {
 		return;
 	}
 
-	method int getRow() {
-		return row;
-	}
-
-	method int getCol() {
-		return col;
-	}
-
-	method void move(int newCol, int newRow) {
-		do clear();
-		let col = newCol;
-		let row = newRow;
-		do draw();
-
-		return;
-	}
-
-	method void moveRight() {
-		do clear();
-		let col = col + 1;
-		do draw();
-
-		return;
-	}
-
-	method void moveLeft() {
-		do clear();
-		let col = col - 1;
-		do draw();
-
-		return;
-	}
-
-	method void moveUp() {
-		do clear();
-		let row = row - 1;
-		do draw();
-
-		return;
-	}
-
-	method void moveDown() {
-		do clear();
-		let row = row + 1;
-		do draw();
-
-		return;
-	}
 
 	function void rawDraw(int location) {
 		var int memAddress;
