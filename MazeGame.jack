@@ -74,17 +74,72 @@ class MazeGame {
 		var int col;
 		var int row;
 
-		// Fill out the top and bottom rows
+		// Fill out the top row
+		/*
 		let col = 0;
 		while(col < COL_COUNT) {
 			do setTile(  0, col, TILE_WALL);
 			let col = col + 1;
 		}
+		*/
+		do placeHLine(0, 0, COL_COUNT - 1);
+		do placeRect( 3, 14,  8, 27);
+		do placeRect( 3,  6, 16, 18);
+		do placeRect( 3,  8, 18, 22);
+		do placeRect( 3,  8, 22, 27);
+		do placeRect(11, 14, 16, 20);
+		do placeRect(11, 14, 21, 27);
 
+		do setTile( 9, 8, TILE_EMPTY);
+		do setTile( 7,16, TILE_EMPTY);
+		do setTile( 8,20, TILE_EMPTY);
+		do setTile( 8,25, TILE_EMPTY);
+		do setTile(12,16, TILE_EMPTY);
+		do setTile(11,26, TILE_EMPTY);
+
+		do setTile( 5,10, TILE_ITEM);
+		do setTile( 5,12, TILE_ITEM);
+		do setTile( 4,19, TILE_ITEM);
+		do setTile( 4,20, TILE_ITEM);
+		do setTile( 6,23, TILE_ITEM);
+		do setTile( 5,24, TILE_ITEM);
+		do setTile(13,19, TILE_ITEM);
+		do setTile(13,22, TILE_ITEM);
+		do setTile(12,23, TILE_ITEM);
+
+/*
 		do setTile( 4,  4, TILE_WALL);
 		do setTile( 4,  5, TILE_WALL);
 		do setTile( 5,  5, TILE_WALL);
 		do setTile( 2,  4, TILE_ITEM);
+		*/
+
+		return;
+	}
+
+	method void placeHLine(int row, int col1, int col2) {
+		while(col1 < (col2+1)) {
+			do setTile(row, col1, TILE_WALL);
+			let col1 = col1 + 1;
+		}
+
+		return;
+	}
+
+	method void placeVLine(int row1, int row2, int col) {
+		while(row1 < (row2+1)) {
+			do setTile(row1, col, TILE_WALL);
+			let row1 = row1 + 1;
+		}
+
+		return;
+	}
+
+	method void placeRect(int row1, int row2, int col1, int col2) {
+		do placeHLine(row1, col1, col2);
+		do placeHLine(row2, col1, col2);
+		do placeVLine(row1, row2, col1);
+		do placeVLine(row1, row2, col2);
 
 		return;
 	}
