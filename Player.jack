@@ -1,8 +1,12 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/09/Square/Main.jack
+// Author:    Daniel Edwards
+// File name: Player.jack
 
+/**
+ * This represents the player. It's relatively basic, mostly just in charge
+ * of actually drawing the player and tracking their position. It doesn't
+ * attempt to check if the desired positions are valid; that's up to the
+ * caller.
+ */
 class Player {
 	static int SIZE;
 	static int COL_COUNT;	// Used because rawDraw is dumb.
